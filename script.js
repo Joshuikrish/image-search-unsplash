@@ -3,49 +3,35 @@ const { createApp } = Vue;
 createApp({
   data() {
     return {
-      videos: [],
-      message: '',
-      input: '',
+      images: [],
+      message:'',
+      input:'',
       showSuccessAlert: false,
     };
   },
   methods: {
-    async onEnter() {
-      
-      if (this.input === '') {
-        return
-      }
-      console.log('load')
-      await axios.get('https://www.googleapis.com/youtube/v3/search', {
-        params: {
-          part: 'snippet',
-          q: this.input,
-          type: 'video',
-          key: '[ Your API key ]',
-          maxResults: 3
-        }
+     async onEnter() {
+      const response = await axios.get(
+      "https://api.unsplash.com/search/photos?page=1&query="+this.input+"&orientation=landscape&collections=1451037&content_filter=high&aspect_ratio=1.5:1",{
+        headers: { Authorization: "Client-ID Yme6ZcumIXpWryQ0DPc249CE0ua2Mxh66Y-4W2gPAAc", },
+      }).then(response=>{
+        this.images=response.data.results
       })
-        .then(response => {
-          this.videos = response.data.items;
-          console.log(this.videos)
-        })
-        .catch(error => {
-          console.log(error);
-        });
-        console.log(this.videos[0].id.videoId)
-        this.show()
-        console.log('compl')
-      },
-      show(){
-        this.showSuccessAlert=true;
-      }
+      // alert(this.input)
+      
+      
+      
+     
+    },    
+
+  
+  
   },
   mounted() {
-
     
   },
   beforeUnmount() {
-
+    
   },
 
 }).mount("#app");
